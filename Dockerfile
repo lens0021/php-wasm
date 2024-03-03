@@ -93,7 +93,8 @@ RUN cd /src/php-src && ./buildconf --force \
 		--enable-simplexml   \
 		--enable-pdo       \
 		--with-pdo-sqlite  \
-		--with-sqlite3
+		--with-sqlite3     \
+		--enable-phar
 RUN cd /src/php-src && emmake make -j8
 # PHP7 outputs a libphp7 whereas php8 a libphp
 RUN cd /src/php-src && bash -c '[[ -f .libs/libphp7.la ]] && mv .libs/libphp7.la .libs/libphp.la && mv .libs/libphp7.a .libs/libphp.a && mv .libs/libphp7.lai .libs/libphp.lai || exit 0'
@@ -103,6 +104,7 @@ RUN cd /src/php-src && emcc $OPTIMIZE \
 		-I Zend  \
 		-I main  \
 		-I TSRM/ \
+		-I ext/phar \
 		-c \
 		/src/source/phpw.c \
 		-o /src/phpw.o \
